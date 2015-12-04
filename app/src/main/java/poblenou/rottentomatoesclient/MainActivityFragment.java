@@ -8,18 +8,23 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import poblenou.rottentomatoesclient.pojo.Result;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
 
-    private ArrayList<String> items;
-    private ArrayAdapter<String> adapter;
+    GridView gridPelis;
+
+    private MovieAdapter adapter;
+    private ArrayList<Result> results;
 
     public MainActivityFragment() {
     }
@@ -39,32 +44,18 @@ public class MainActivityFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //View lvPelis = rootView.findViewById(R.id.lvPelis);
-        ListView lvPelis = (ListView) rootView.findViewById(R.id.lvPelis);
+        gridPelis = (GridView) rootView.findViewById(R.id.gridPelis);
+        results = new ArrayList<>();
+        adapter = new MovieAdapter(getContext(), 0, results);
+        gridPelis.setAdapter(adapter);
 
-        String[] data = {
-                "Los 400 golpes",
-                "El odio",
-                "El padrino",
-                "El padrino. Parte II",
-                "Ocurrió cerca de su casa",
-                "Infiltrados",
-                "Umberto D."
-                         };
 
-        items = new ArrayList<>(Arrays.asList(data));
-
-        adapter = new ArrayAdapter<>(
-                 getContext(),
-                 R.layout.lvpelis_row,
-                 R.id.tvPeli,
-                 items);
-
-        lvPelis.setAdapter(adapter);
+        RetroFit x = new RetroFit();
+        x.mostrarPopulares(adapter);
+        x.mostrarTopRated(adapter);
         return rootView;
     }
 }
