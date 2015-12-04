@@ -28,10 +28,13 @@ interface InterfazMovies {
 }
 
 public class RetroFit {
+
 //https://api.themoviedb.org/3/movie/popular?api_key=13bc649b4be786a5459437a47ac059a5     FULL LINK POPULARES
     private final InterfazMovies service;                                    //Constante objeto de la interfaz
     private final String BASE_URL = "https://api.themoviedb.org/3/movie/";          //Constante URL parte que no cambia
     private final String APPID = "13bc649b4be786a5459437a47ac059a5";                //Api Key de la API de Moviedb
+    private InterfazMovies servicePopular; // Interfaz para las peliculas populares
+    private InterfazMovies serviceTopRated; // Interfaz para las peliculas mejor valoradas
 
     //Constructor de la clase con el builder
     public RetroFit()
@@ -45,6 +48,7 @@ public class RetroFit {
 
     //Metodo para mostrar las peliculas populares
     public void mostrarPopulares(final MovieAdapter adapter) {
+
         //Llamada al servicio Moviedb con el metodo de la interfaz
         Call<Example> llamadaPelicula = service.peliculasPopulares(APPID);
 

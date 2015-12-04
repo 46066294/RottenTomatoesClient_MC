@@ -1,6 +1,8 @@
 package poblenou.rottentomatoesclient;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +27,7 @@ public class MainActivityFragment extends Fragment {
 
     private MovieAdapter adapter;
     private ArrayList<Result> results;
+    private RetroFit x = new RetroFit();
 
     public MainActivityFragment() {
     }
@@ -35,13 +38,29 @@ public class MainActivityFragment extends Fragment {
         inflater.inflate(R.menu.menu_pelis_fragment, menu);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        refresh();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
+    public void refresh() { // El mètode refresh gestiona les preferencies. Segons les preferencies, cridarà al mètode popular o al mètode toprated
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext()); // necesario para referenciar y leer la configuración del programa
+
+        if (settings.getString("ListaPeliculas", "0").equals("0")) {
+            x.mostrarPopulares(adapter);
+        } else if (settings.getString("ListaPeliculas", "1").equals("1")) {
+            x.mostrarTopRated(adapter);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,10 +71,6 @@ public class MainActivityFragment extends Fragment {
         adapter = new MovieAdapter(getContext(), 0, results);
         gridPelis.setAdapter(adapter);
 
-
-        RetroFit x = new RetroFit();
-        x.mostrarPopulares(adapter);
-        x.mostrarTopRated(adapter);
         return rootView;
     }
 }
